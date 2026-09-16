@@ -1,0 +1,59 @@
+import math
+#1.定义一个类（面向对象基础）
+class student:
+    def __init__(self,name,scores):
+        self.name=name
+        self.scores = scores #字典格式，例如{'math':95,'english':88}
+
+    #计算平均分的方法
+    def get_average(self):
+        if not self.scores:
+            return 0
+        total = sum(self.scores.values())
+        return round(total/len(self.scores),2)
+
+#2.定义一个函数（包含异常处理和列表推导式）
+def process_students_data(students):
+    print("--- 正在处理学生信息 ---")
+
+    #列表推导式：筛选出平均分大于 80 分的高分学生
+    high_achievers = [s.name for s in students if s.get_average() >= 80]
+    print(f"优秀学生名单:{high_achievers}")
+
+    #循环与字典遍历
+    for student in students:
+        avg = student.get_average()
+        print(f"\n学生:{student.name} | 平均分：{avg}")
+
+        #条件判断
+        for subject,score in student.scores.items():
+            status = "及格" if score >= 60 else "还需努力"
+            print(f" - {subject}:{score}分 ({status})")
+
+#3.主程序入口与文件写入练习
+def main():
+    # 数据准备 （列表 + 字典组合）
+    data = [
+        student("zwxy",{"python":95,"linux":88,"shell":90}),
+        student("zw",{"python":9,"linux":8,"shell":9}),
+        student("xy",{"python":5,"linux":8,"shell":0})       
+    ]
+    #调用处理函数
+    process_students_data(data)
+
+    #4.异常处理与文件写入 （try-except-finally)
+    file_name = "learnning_record.txt"
+    try:
+        with open(file_name,"w",encoding = "utf-8") as f:
+            f.write("=== 秋生的学习记录 ===\n")
+            for s in data:
+                f.write(f"{s.name}: 平均分{s.get_average()}\n")
+            print(f"\n[成功] 成绩记录已成功写入文件 '{file_name}'中！")
+    except IOError as e:
+        print(f"\n[错误] 写入文件失败：{e}")
+    finally:
+        print("--- 练习程序执行完毕 (qwq) ---")
+
+# 执行主函数
+if __name__ == "__main__":
+    main()
